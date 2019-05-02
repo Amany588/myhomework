@@ -1,3 +1,4 @@
+// 10 marks
 package myhomewrk;
 
 import java.io.*;
@@ -10,18 +11,18 @@ import java.util.*;
 public class Main {
 
 	public static void main(String[] args) throws InterruptedException {
-		
-		BlockingQueue q1 = new BlockingQueue(100);
+
+		BlockingQueue q1 = new BlockingQueue(100); // 1/2 marks
 		BlockingQueue q2 = new BlockingQueue(100);
-		
+
 		ThreadNum1 t1 = new ThreadNum1(q1);
 		Thread th1 = new Thread(t1);
-		
-		ThreadNum2 th2[] = new ThreadNum2[8];
 
-		ThreadNum3 t3 = new ThreadNum3(q2);
+		ThreadNum2 th2[] = new ThreadNum2[8]; // 1/2 marks
+
+		ThreadNum3 t3 = new ThreadNum3(q2); // 1/2 marks
 		Thread th3 = new Thread(t3);
-		
+
 		th1.start();
 		for (int i = 0; i < 8; i++) {
 			th2[i] = new ThreadNum2(q1, q2);
@@ -31,7 +32,7 @@ public class Main {
 
 		th3.start();
 
-		th1.join();
+		th1.join(); // 1/2 marks
 
 		for (int i = 0; i < 8; i++) {
 
@@ -40,7 +41,7 @@ public class Main {
 		}
 
 		th3.join();
-		
+
 		System.out.println("end");
 
 	}
@@ -49,19 +50,19 @@ public class Main {
 }
 
 class ThreadNum1 extends Thread {
-	BlockingQueue q1;
+	BlockingQueue q1; // 1/2 marks
 
-	public ThreadNum1(BlockingQueue q) {
+	public ThreadNum1(BlockingQueue q) { // 1/2 marks
 		this.q1 = q;
 	}
 
 		public void run() {
-		
-		for (int i = 0; i < 100; i++) {
+
+		for (int i = 0; i < 100; i++) { // 1/2 marks
 			try {
-				q1.add("f" + i + ".txt");
+				q1.add("f" + i + ".txt"); // 1/2 marks
 			} catch (InterruptedException e) {
-				
+
 				e.printStackTrace();
 			}
 		}
@@ -71,42 +72,42 @@ class ThreadNum1 extends Thread {
 
 
 class ThreadNum2 extends Thread {
-	
+
 	BlockingQueue q1;
-	BlockingQueue q2;
+	BlockingQueue q2; // 1/2 marks
 	private String rawDataFromFile;
 	private String processedData;
 	private String name;
 
-	public ThreadNum2(BlockingQueue q1, BlockingQueue q2) {
+	public ThreadNum2(BlockingQueue q1, BlockingQueue q2) { // 1/2 marks
 		this.q1 = q1;
 		this.q2 = q2;
 	}
 
 	public void run() {
-		
-		while (q2.count() <= q2.limit) {
+
+		while (q2.count() <= q2.limit) { // 2 marks
 			try {
-				
-				name = q1.pop().toString();
+
+				name = q1.pop().toString(); // 1/2 marks
 			} catch (InterruptedException e1) {
-				
+
 				e1.printStackTrace();
 			}
 			try {
-				
+
 				rawDataFromFile = FileUtils.readFileAsString("data\\" + name);
 			} catch (IOException e) {
-		
+
 				e.printStackTrace();
 			}
-			
+
 			processedData =name + SomeMethod.count(rawDataFromFile);
 			try {
-				
-				q2.add(processedData);
+
+				q2.add(processedData); // 1/2 marks
 			} catch (InterruptedException e) {
-				
+
 				e.printStackTrace();
 			}
 
@@ -117,25 +118,25 @@ class ThreadNum2 extends Thread {
 }
 
 class ThirdThread extends Thread {
-	BlockingQueue q2;
+	BlockingQueue q2; // 1/2 marks
 	private String processedData;
 
-	public ThirdThread(BlockingQueue q2) {
+	public ThirdThread(BlockingQueue q2) { // 1/2 marks
 		this.q2 = q2;
 	}
 
 	public void run() {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 100; i++) { // 1/2 marks
 			try {
-				processedData = (String) q2.pop();
+				processedData = (String) q2.pop(); // 1/2 marks
 			} catch (InterruptedException e1) {
-				
+
 				e1.printStackTrace();
 			}
 			try {
 				FileUtils.appendStringToFile("processedData.txt", processedData);
 			} catch (IOException e) {
-				
+
 				e.printStackTrace();
 			}
 
@@ -158,17 +159,17 @@ class ThirdThread extends Thread {
 	public void run() {
 				for (int i = 0; i < 100; i++) {
 			try {
-				
+
 				processedData = (String) q2.pop();
 			} catch (InterruptedException e1) {
-				
+
 				e1.printStackTrace();
 			}
 			try {
-				
+
 				FileUtils.appendStringToFile("OutPut.txt", processedData);
 			} catch (IOException e) {
-				
+
 				e.printStackTrace();
 			}
 
@@ -176,8 +177,8 @@ class ThirdThread extends Thread {
 	}
 }
   class SomeMethod {
-		
-		
+
+
 		public static String count(String s) {
 			int numL = 0;
 			int numD = 0;
@@ -198,14 +199,14 @@ class ThirdThread extends Thread {
 
 	}
 
- 
+
   class FileUtils {
- 	
+
  	public static String readFileAsString(String name) throws IOException {
  		return new String(Files.readAllBytes(Paths.get(name)));
  	}
 
- 	
+
  	public static void appendStringToFile(String name, String line) throws IOException {
  		File file = new File(name);
  		FileWriter fw = new FileWriter(file, true);
@@ -219,7 +220,7 @@ class ThirdThread extends Thread {
   class BlockingQueue {
  	private List queue;
  	public Integer limit;
- 	
+
  	private int counter = 0;
 
  	public synchronized int count() {
@@ -273,7 +274,7 @@ class ThirdThread extends Thread {
  			try {
  				q1.add("f" + i + ".txt");
  			} catch (InterruptedException e) {
- 			
+
  				e.printStackTrace();
  			}
  		}
@@ -281,4 +282,3 @@ class ThirdThread extends Thread {
  	}
 
  }
-
